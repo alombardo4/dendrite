@@ -1,0 +1,50 @@
+{
+  "name": "dendrite",
+  "version": "1.0.0",
+  "description": "An event-sourcing library for NodeJS",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "test": "jest",
+    "test:w": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alombardo4/dendrite.git"
+  },
+  "author": "Alec Lombardo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alombardo4/dendrite/issues"
+  },
+  "homepage": "https://github.com/alombardo4/dendrite#readme",
+  "devDependencies": {
+    "@types/amqplib": "^0.5.7",
+    "@types/bluebird": "^3.5.20",
+    "@types/jest": "^22.2.3",
+    "jest": "^22.4.3",
+    "tslint": "^5.10.0",
+    "typescript": "^2.8.3"
+  },
+  "dependencies": {
+    "amqplib": "^0.5.2",
+    "bluebird": "^3.5.1",
+    "rxjs": "^6.2.0"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "<rootDir>/test-preprocessor.js"
+    },
+    "testMatch": [
+      "<rootDir>/test/**/*.spec.(ts|js)"
+    ]
+  }
+}
