@@ -1,0 +1,26 @@
+<testsuites name="jest tests" tests="10" failures="0" time="1.472">
+  <testsuite name="Rabbit Event Bus Implementation" errors="0" failures="0" skipped="0" timestamp="2018-08-19T16:54:35" time="1.021" tests="7">
+    <testcase classname="Rabbit Event Bus Implementation should be able to connect to Rabbit" name="Rabbit Event Bus Implementation should be able to connect to Rabbit" time="0.029">
+    </testcase>
+    <testcase classname="Rabbit Event Bus Implementation should create a queue" name="Rabbit Event Bus Implementation should create a queue" time="0.019">
+    </testcase>
+    <testcase classname="Rabbit Event Bus Implementation should publish an event to the eventbus" name="Rabbit Event Bus Implementation should publish an event to the eventbus" time="0.022">
+    </testcase>
+    <testcase classname="Rabbit Event Bus Implementation should resolve when events are received" name="Rabbit Event Bus Implementation should resolve when events are received" time="0.144">
+    </testcase>
+    <testcase classname="Rabbit Event Bus Implementation publish and receive should both work" name="Rabbit Event Bus Implementation publish and receive should both work" time="0.12">
+    </testcase>
+    <testcase classname="Rabbit Event Bus Implementation should resolve only for topics it cares about" name="Rabbit Event Bus Implementation should resolve only for topics it cares about" time="0.141">
+    </testcase>
+    <testcase classname="Rabbit Event Bus Implementation should resolve for all topics it cares about" name="Rabbit Event Bus Implementation should resolve for all topics it cares about" time="0.135">
+    </testcase>
+  </testsuite>
+  <testsuite name="Rabbit Event Bus Implementation" errors="0" failures="0" skipped="0" timestamp="2018-08-19T16:54:36" time="0.034" tests="3">
+    <testcase classname="Rabbit Event Bus Implementation adding topic bindings to a non-consumer should throw an error" name="Rabbit Event Bus Implementation adding topic bindings to a non-consumer should throw an error" time="0">
+    </testcase>
+    <testcase classname="Rabbit Event Bus Implementation adding empty topic bindings should throw an error" name="Rabbit Event Bus Implementation adding empty topic bindings should throw an error" time="0.001">
+    </testcase>
+    <testcase classname="Rabbit Event Bus Implementation adding topic bindings before connecting should throw an error" name="Rabbit Event Bus Implementation adding topic bindings before connecting should throw an error" time="0">
+    </testcase>
+  </testsuite>
+</testsuites>
