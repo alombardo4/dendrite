@@ -1,50 +1,44 @@
 import { RabbitEventBus } from '../../src/eventbus/implementations/rabbit-event-bus.class';
-import * as amqp  from "amqplib";
-import { DendriteProducedEvent } from 'src/models/dendrite-published-event';
-import { DendriteEventBase } from 'src/models/dendrite-event-base.interface';
-import { DendriteConsumedEvent } from 'src/models/dendrite-consumed-event';
+import * as amqp  from 'amqplib';
+import { DendriteEventBase } from '../../src/models/dendrite-event-base.interface';
+import { DendriteConsumedEvent } from '../../src/models/dendrite-consumed-event';
+import { switchMap } from 'rxjs/operators';
+import * as uuid from 'uuid';
 
 describe('Rabbit Event Bus Implementation', () => {
     const connectionString = 'amqp://localhost:5672';
-    const queueName = 'testqueue';
+
+    let queueNames: string[] = [];
 
     class TestEvent implements DendriteEventBase {
         name = 'test.event.name';
         word = 'Bird';
     }
 
-    afterEach(() => {
-        let connection: amqp.Connection;
-        let channel: amqp.Channel;
+    beforeEach(() => {
+        queueNames = [];
+    });
 
-        return amqp.connect(connectionString)
-            .then(conn => {
-                connection = conn;
-                return conn.createChannel();
+    afterEach((done) => {
+        amqp.connect(connectionString)
+            .then(connection => {
+                return connection.createChannel();
             })
-            .then(chan => {
-                channel = chan;
-                return channel.deleteExchange('eventbus');
-            })
-            .then(_ => {
-                return channel.deleteQueue(queueName);
-            })
-            .then(_ => {
-                return connection.close();
-            })
-            .catch(err => {
-                console.error(err);
-                throw err;
+            .then(channel => {
+                channel.deleteExchange('eventbus');
+                queueNames.forEach(name => channel.deleteQueue(name));
+                done();
+
             });
     });
 
     it('should be able to connect to Rabbit', (done) => {
         // Arrange
-        const connectionString = 'amqp://localhost:5672';
-        const queueName = 'testqueue';
+        const queueName = uuid.v4();
+        queueNames.push(queueName);
 
         // Act
-        const rabbitEventBus: RabbitEventBus = new RabbitEventBus(connectionString, queueName);
+        const rabbitEventBus: RabbitEventBus = new RabbitEventBus(connectionString, {}, queueName);
 
         // Assert
         rabbitEventBus.connect()
@@ -58,14 +52,14 @@ describe('Rabbit Event Bus Implementation', () => {
 
     it('should create a queue', (done) => {
         // Arrange
-        const connectionString = 'amqp://localhost:5672';
-        const queueName = 'testqueue';
+        const queueName = uuid.v4();
+        queueNames.push(queueName);
 
         // Act
-        const rabbitEventBus: RabbitEventBus = new RabbitEventBus(connectionString, queueName, { isConsumer: true });
+        const rabbitEventBus: RabbitEventBus = new RabbitEventBus(connectionString, { isConsumer: true }, queueName);
 
         // Assert
-        rabbitEventBus.connect()
+        rabbitEventBus.connect(['dummy.topic.binding'])
             .subscribe(_ => {
                 rabbitEventBus['channel'].checkQueue(queueName)
                     .then(() => {
@@ -77,14 +71,14 @@ describe('Rabbit Event Bus Implementation', () => {
 
     it('should publish an event to the eventbus', (done) => {
         // Arrange
-        const connectionString = 'amqp://localhost:5672';
-        const queueName = 'testqueue';
+        const queueName = uuid.v4();
+        queueNames.push(queueName);
 
-        const rabbitEventBus: RabbitEventBus = new RabbitEventBus(connectionString, queueName);
+        const rabbitEventBus: RabbitEventBus = new RabbitEventBus(connectionString, {}, queueName);
         rabbitEventBus.connect()
             .subscribe(_ => {
                 rabbitEventBus['channel'].assertQueue(queueName);
-                rabbitEventBus['channel'].bindQueue(queueName, 'eventbus', '*')
+                rabbitEventBus['channel'].bindQueue(queueName, 'eventbus', 'test.event.name')
                     .then(_ => {
                         return rabbitEventBus['channel'].consume(queueName, (msg) => {
                             if (msg) {
@@ -105,24 +99,151 @@ describe('Rabbit Event Bus Implementation', () => {
 
     it('should resolve when events are received', (done) => {
         // Arrange
-        const connectionString = 'amqp://localhost:5672';
-        const queueName = 'testqueue';
+        const queueName = `recv-${uuid.v4()}`;
+        queueNames.push(queueName);
+        const numberOfEvents = 100;
 
-        const rabbitEventBus: RabbitEventBus = new RabbitEventBus(connectionString, queueName, { isConsumer: true, isProducer: true});
-        rabbitEventBus.connect()
+        const rabbitEventBus: RabbitEventBus = new RabbitEventBus(connectionString, { isConsumer: true, isProducer: true}, queueName);
+        rabbitEventBus.connect(['test.event.name'])
             .subscribe(
                 _ => {
                     let eventCounter = 0;
                     rabbitEventBus.consumeEvents().subscribe((event: DendriteConsumedEvent<any>) => {
                         eventCounter++;
-                        if (eventCounter === 3) {
-                            expect(eventCounter).toBe(3);
+                        if (eventCounter === numberOfEvents) {
+                            expect(eventCounter).toBe(numberOfEvents);
                             done();
                         }
                     });
-                    rabbitEventBus.publishEvent(new TestEvent());
-                    rabbitEventBus.publishEvent(new TestEvent());
-                    rabbitEventBus.publishEvent(new TestEvent());
+                    setTimeout(() => {
+                        for (let i = 0; i < numberOfEvents; i++) {
+                            rabbitEventBus.publishEvent(new TestEvent());
+                        }
+                    }, 100);
+
+                },
+                err => done(err)
+            );
+    });
+
+    it('publish and receive should both work', (done) => {
+        const queueName = uuid.v4();
+        queueNames.push(queueName);
+
+        const producerEventBus = new RabbitEventBus(connectionString, {isProducer: true });
+        const consumerEventBus = new RabbitEventBus(connectionString, { isConsumer: true }, queueName);
+
+        consumerEventBus.connect(['test.event.name'])
+            .subscribe(_ => {
+                let eventCounter = 0;
+                consumerEventBus.consumeEvents().subscribe(event => {
+                    eventCounter++;
+                    if (eventCounter === 2) {
+                        expect(event.name).toEqual('test.event.name');
+                        done();
+                    }
+
+                });
+                setTimeout(() => {
+                    producerEventBus.connect().subscribe(_ => {
+                        producerEventBus.publishEvent(new TestEvent());
+                        producerEventBus.publishEvent(new TestEvent());
+                    });
+                }, 100)
+
+
+            });
+    });
+
+    it('should resolve only for topics it cares about', (done) => {
+        // Arrange
+        const queueName = `recv-${uuid.v4()}`;
+        queueNames.push(queueName);
+        const numberOfEvents = 100;
+
+        class TestEvent2 implements DendriteEventBase {
+            name = 'test.event.name2';
+        }
+
+        const rabbitEventBus: RabbitEventBus = new RabbitEventBus(connectionString, { isConsumer: true, isProducer: true}, queueName);
+        rabbitEventBus.connect(['test.event.name'])
+            .subscribe(
+                _ => {
+                    let eventCounter = 0;
+                    const expectedNumber = 50;
+                    rabbitEventBus.consumeEvents().subscribe((event: DendriteConsumedEvent<any>) => {
+                        eventCounter++;
+                        if (eventCounter === expectedNumber) {
+                            expect(eventCounter).toBe(expectedNumber);
+                            done();
+                        } else if (eventCounter > expectedNumber) {
+                            throw new Error(`Expected ${expectedNumber} and got ${eventCounter} events.`);
+                        }
+                    });
+                    setTimeout(() => {
+                        for (let i = 0; i < numberOfEvents; i++) {
+                            if ( i % 2 === 0) {
+                                rabbitEventBus.publishEvent(new TestEvent());
+                            } else {
+                                rabbitEventBus.publishEvent(new TestEvent2());
+                            }
+                        }
+                    }, 100);
+
+                },
+                err => done(err)
+            );
+    });
+
+    it('should resolve for all topics it cares about', (done) => {
+        // Arrange
+        const queueName = `recv-${uuid.v4()}`;
+        queueNames.push(queueName);
+        const numberOfEvents = 90;
+
+        class TestEvent2 implements DendriteEventBase {
+            name = 'test.event.name2';
+        }
+
+        class TestEvent3 implements DendriteEventBase {
+            name = 'test.event.name3';
+        }
+
+        const rabbitEventBus: RabbitEventBus = new RabbitEventBus(connectionString, { isConsumer: true, isProducer: true}, queueName);
+        rabbitEventBus.connect(['test.event.name', 'test.event.name2'])
+            .subscribe(
+                _ => {
+                    let eventCounter = 0;
+                    const expectedNumber = 60;
+                    rabbitEventBus.consumeEvents().subscribe((event: DendriteConsumedEvent<any>) => {
+                        eventCounter++;
+                        if (eventCounter === expectedNumber) {
+                            rabbitEventBus['channel'].checkQueue(queueName)
+                                .then(value => {
+                                    expect(eventCounter).toBe(expectedNumber);
+                                    expect(value.messageCount).toEqual(0);
+                                    done();
+                                });
+                        } else if (eventCounter > expectedNumber) {
+                            throw new Error(`Expected ${expectedNumber} and got ${eventCounter} events.`);
+                        }
+                    });
+                    setTimeout(() => {
+                        for (let i = 0; i < numberOfEvents; i++) {
+                            switch (i % 3) {
+                                case 0:
+                                    rabbitEventBus.publishEvent(new TestEvent());
+                                    break;
+                                case 1:
+                                    rabbitEventBus.publishEvent(new TestEvent2());
+                                    break;
+                                case 2:
+                                    rabbitEventBus.publishEvent(new TestEvent3());
+                                    break;
+                            }
+                        }
+                    }, 100);
+
                 },
                 err => done(err)
             );

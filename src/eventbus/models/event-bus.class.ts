@@ -6,7 +6,7 @@ import { DendriteEventBase } from "../../models/dendrite-event-base.interface";
 import { Observable } from "rxjs";
 
 export abstract class EventBus {
-    constructor(protected connectionString: string, protected queueName: string, protected queueConfig?: QueueConfig) {
+    constructor(protected connectionString: string, protected queueConfig?: QueueConfig,  protected queueName?: string) {
     }
 
     abstract connect(): Observable<void>;
