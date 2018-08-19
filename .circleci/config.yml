@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:7.10
+      - image: circleci/node:10
       - image: rabbitmq:3-management-alpine
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -37,7 +37,7 @@ jobs:
           name: Run linter
           command: npm run lint
 
-          
+
       - run:
           name: Waiting for Rabbit to be ready
           command: |
