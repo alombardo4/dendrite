@@ -1,5 +1,5 @@
-import { DendriteEvent } from "./dendrite-event";
-import { DendriteEventBase } from "./dendrite-event-base.interface";
+import { DendriteEvent } from './dendrite-event';
+import { DendriteEventBase } from './dendrite-event-base.interface';
 
 export class DendriteConsumedEvent<T extends DendriteEventBase> extends DendriteEvent<T> {
     private _body: T;

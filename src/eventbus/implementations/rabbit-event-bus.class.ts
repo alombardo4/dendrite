@@ -1,8 +1,8 @@
-import { EventBus } from "../models/event-bus.class";
-import * as amqp  from "amqplib";
-import { DendriteProducedEvent } from "../../models/dendrite-published-event";
-import { DendriteConsumedEvent } from "../../models/dendrite-consumed-event";
-import { DendriteEventBase } from "../../models/dendrite-event-base.interface";
+import { EventBus } from '../models/event-bus.class';
+import * as amqp  from 'amqplib';
+import { DendriteProducedEvent } from '../../models/dendrite-published-event';
+import { DendriteConsumedEvent } from '../../models/dendrite-consumed-event';
+import { DendriteEventBase } from '../../models/dendrite-event-base.interface';
 import { Observable, Observer } from 'rxjs';
 
 export class RabbitEventBus extends EventBus {

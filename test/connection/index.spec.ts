@@ -149,7 +149,7 @@ describe('Rabbit Event Bus Implementation', () => {
                         producerEventBus.publishEvent(new TestEvent());
                         producerEventBus.publishEvent(new TestEvent());
                     });
-                }, 100)
+                }, 100);
 
 
             });

@@ -11,7 +11,8 @@
     "tsc:w": "tsc -w",
     "test": "jest",
     "test:w": "jest --watch",
-    "test:ci": "jest --ci --reporters=default --reporters=jest-junit --coverage --testResultsProcessor=\"jest-junit\""
+    "test:ci": "jest --ci --reporters=default --reporters=jest-junit --coverage --testResultsProcessor=\"jest-junit\"",
+    "lint": "tslint -p ."
   },
   "repository": {
     "type": "git",
