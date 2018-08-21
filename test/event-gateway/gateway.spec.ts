@@ -1,17 +1,17 @@
-import { RabbitEventBus } from "../../src/eventbus/implementations/rabbit-event-bus.class";
-import { EventBus, QueueConfig } from "../../src";
+import { RabbitEventBus } from '../../src/eventbus/implementations/rabbit-event-bus.class';
+import { EventBus, QueueConfig } from '../../src';
 import * as uuid from 'uuid';
-import { EventHandler } from "../../src/handlers/event-handler.class";
-import { EventHandlerMapping } from "../../src/models/event-handler-mapping";
-import { EventGateway } from "../../src/gateways/event-gateway.class";
-import { DendriteEventBase } from "../../src/models/dendrite-event-base.interface";
-import { DendriteProducedEvent } from "../../src/models/dendrite-published-event";
-import { DendriteConsumedEvent } from "src/models/dendrite-consumed-event";
+import { EventHandler } from '../../src/handlers/event-handler.class';
+import { EventHandlerMapping } from '../../src/models/event-handler-mapping';
+import { EventGateway } from '../../src/gateways/event-gateway.class';
+import { DendriteEventBase } from '../../src/models/dendrite-event-base.interface';
+import { DendriteProducedEvent } from '../../src/models/dendrite-published-event';
+import { DendriteConsumedEvent } from 'src/models/dendrite-consumed-event';
 
 describe('EventGateway', () => {
 
   const connectionString = 'amqp://localhost:5672';
-  
+
   let eventBus: RabbitEventBus;
   let queueName: string;
   const queueConfig: QueueConfig = {

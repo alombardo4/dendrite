@@ -1,7 +1,7 @@
-import { EventHandler } from "../handlers/event-handler.class";
-import { EventHandlerMapping } from "../models/event-handler-mapping";
-import { EventBus } from "../eventbus";
-import { DendriteConsumedEvent } from "../models/dendrite-consumed-event";
+import { EventHandler } from '../handlers/event-handler.class';
+import { EventHandlerMapping } from '../models/event-handler-mapping';
+import { EventBus } from '../eventbus';
+import { DendriteConsumedEvent } from '../models/dendrite-consumed-event';
 
 export class EventGateway {
   private eventHandlers: EventHandler[];
