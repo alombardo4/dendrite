@@ -9,7 +9,7 @@ export abstract class EventBus {
     constructor(protected connectionString: string, protected queueConfig?: QueueConfig,  protected queueName?: string) {
     }
 
-    abstract connect(): Observable<void>;
+    abstract connect(bindings?: string[]): Observable<void>;
 
     abstract publishEvent(event: DendriteEventBase): boolean;
 
