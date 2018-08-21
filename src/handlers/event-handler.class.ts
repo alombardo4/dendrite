@@ -1,5 +1,5 @@
 import { Channel } from 'amqplib';
-import { EventHandlerMapping } from '../models/event-handler-mapping';
+import { EventHandlerMapping } from '.';
 
 export abstract class EventHandler {
 

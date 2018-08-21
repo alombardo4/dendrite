@@ -1,4 +1,4 @@
-import { DendriteEventBase } from './dendrite-event-base.interface';
+import { DendriteEventBase } from '.';
 
 export abstract class DendriteEvent<T extends DendriteEventBase> {
     protected _name: string;

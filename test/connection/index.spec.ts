@@ -1,8 +1,5 @@
-import { RabbitEventBus } from '../../src/eventbus/implementations/rabbit-event-bus.class';
 import * as amqp  from 'amqplib';
-import { DendriteEventBase } from '../../src/models/dendrite-event-base.interface';
-import { DendriteConsumedEvent } from '../../src/models/dendrite-consumed-event';
-import { switchMap } from 'rxjs/operators';
+import { DendriteEventBase, DendriteConsumedEvent, RabbitEventBus } from '../../src';
 import * as uuid from 'uuid';
 
 describe('Rabbit Event Bus Implementation', () => {

@@ -1,9 +1,7 @@
-import { EventBus } from '../models/event-bus.class';
 import * as amqp  from 'amqplib';
-import { DendriteProducedEvent } from '../../models/dendrite-published-event';
-import { DendriteConsumedEvent } from '../../models/dendrite-consumed-event';
-import { DendriteEventBase } from '../../models/dendrite-event-base.interface';
 import { Observable, Observer } from 'rxjs';
+import { EventBus } from '..';
+import { DendriteEventBase, DendriteProducedEvent, DendriteConsumedEvent } from '../..';
 
 export class RabbitEventBus extends EventBus {
     private connection: amqp.Connection;
@@ -48,15 +46,12 @@ export class RabbitEventBus extends EventBus {
     private registerTopicBindings(bindings: string[]) {
         if (!this.queueConfig || !this.queueConfig.isConsumer) {
             throw new Error('Topic bindings can only be registered by consumers');
-            return;
         }
         if (!bindings || bindings.length === 0) {
             throw new Error('At least one topic binding must be provided');
-            return;
         }
         if (!this.connection || !this.channel) {
             throw new Error('A connection to rabbit must be established before registering topic bindings');
-            return;
         }
         bindings.forEach(binding => {
             this.channel.bindQueue(this.queueName, this.EVENT_BUS, binding);

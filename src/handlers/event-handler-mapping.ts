@@ -1,4 +1,4 @@
-import { DendriteConsumedEvent } from './dendrite-consumed-event';
+import { DendriteConsumedEvent } from '..';
 
 export interface EventHandlerMapping {
   eventName: string;

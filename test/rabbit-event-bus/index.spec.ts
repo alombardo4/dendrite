@@ -1,4 +1,4 @@
-import { RabbitEventBus } from '../../src/eventbus/implementations/rabbit-event-bus.class';
+import { RabbitEventBus } from '../../src';
 import * as uuid from 'uuid';
 
 describe('Rabbit Event Bus Implementation', () => {
