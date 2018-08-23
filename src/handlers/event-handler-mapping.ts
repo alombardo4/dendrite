@@ -1,6 +1,6 @@
-import { DendriteConsumedEvent } from '..';
+import { DendriteEvent } from '../events';
 
 export interface EventHandlerMapping {
   eventName: string;
-  handlerFunction: (event: DendriteConsumedEvent<any>) => void;
+  handlerFunction: (event: DendriteEvent) => void;
 }

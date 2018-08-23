@@ -1,11 +1,11 @@
-import { EventHandler, EventBus, EventHandlerMapping, DendriteConsumedEvent } from '..';
+import { EventHandler, EventBus, EventHandlerMapping, DendriteEvent } from '..';
 
 export class EventGateway {
   private eventHandlers: EventHandler[];
 
   private eventHandlerMappings: Map<string, EventHandlerMapping>;
 
-  constructor(eventBus: EventBus, eventHandlers: EventHandler[]) {
+  constructor(private eventBus: EventBus, eventHandlers: EventHandler[]) {
     this.eventHandlers = eventHandlers;
     this.eventHandlerMappings = new Map();
     this.eventHandlers.forEach(eh => {
@@ -15,8 +15,8 @@ export class EventGateway {
       });
     });
 
-    eventBus.consumeEvents().subscribe((event: DendriteConsumedEvent<any>) => {
-      const eventName = event.name;
+    eventBus.consumeEvents().subscribe((event: DendriteEvent) => {
+      const eventName = event.metadata.name;
       try {
         this.eventHandlerMappings.get(eventName).handlerFunction(event);
       } catch (e) {

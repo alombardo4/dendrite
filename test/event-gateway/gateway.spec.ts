@@ -1,5 +1,5 @@
 import * as uuid from 'uuid';
-import { EventHandler, RabbitEventBus, QueueConfig, EventGateway, DendriteConsumedEvent, DendriteEventBase, EventHandlerMapping } from '../../src';
+import { EventHandler, RabbitEventBus, QueueConfig, EventGateway, EventHandlerMapping, DendriteEvent, DendriteEventMetadata } from '../../src';
 
 describe('EventGateway', () => {
 
@@ -58,13 +58,13 @@ describe('EventGateway', () => {
       mappings =  [
         {
           eventName: 'test.event.name1',
-          handlerFunction: (event: DendriteConsumedEvent<TestEvent1>) => {
+          handlerFunction: (event: TestEvent1) => {
             gotEvent1 = true;
           }
         },
         {
           eventName: 'test.event.name2',
-          handlerFunction: (event: DendriteConsumedEvent<TestEvent2>) => {
+          handlerFunction: (event: TestEvent2) => {
             gotEvent2 = true;
           }
         }
@@ -74,12 +74,16 @@ describe('EventGateway', () => {
       }
     }
 
-    class TestEvent1 implements DendriteEventBase {
-      name = 'test.event.name1';
+    class TestEvent1 extends DendriteEvent {
+      constructor() {
+        super('test.event.name1');
+      }
     }
 
-    class TestEvent2 implements DendriteEventBase {
-      name = 'test.event.name2';
+    class TestEvent2 extends DendriteEvent {
+      constructor() {
+        super('test.event.name2');
+      }
     }
 
     const eventHandler = new TestEventHandler();
@@ -105,7 +109,7 @@ describe('EventGateway', () => {
       mappings =  [
         {
           eventName: 'test.event.name1',
-          handlerFunction: (event: DendriteConsumedEvent<TestEvent1>) => {
+          handlerFunction: (event: TestEvent1) => {
             gotEvent1 = true;
           }
         }
@@ -119,7 +123,7 @@ describe('EventGateway', () => {
       mappings =  [
         {
           eventName: 'test.event.name2',
-          handlerFunction: (event: DendriteConsumedEvent<TestEvent2>) => {
+          handlerFunction: (event: TestEvent2) => {
             gotEvent2 = true;
           }
         }
@@ -129,12 +133,16 @@ describe('EventGateway', () => {
       }
     }
 
-    class TestEvent1 implements DendriteEventBase {
-      name = 'test.event.name1';
+    class TestEvent1 extends DendriteEvent {
+      constructor() {
+        super('test.event.name1');
+      }
     }
 
-    class TestEvent2 implements DendriteEventBase {
-      name = 'test.event.name2';
+    class TestEvent2 extends DendriteEvent {
+      constructor() {
+        super('test.event.name2');
+      }
     }
 
     const eventHandler1 = new TestEventHandler1();

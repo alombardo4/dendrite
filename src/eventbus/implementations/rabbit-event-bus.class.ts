@@ -1,7 +1,7 @@
 import * as amqp  from 'amqplib';
 import { Observable, Observer } from 'rxjs';
 import { EventBus } from '..';
-import { DendriteEventBase, DendriteProducedEvent, DendriteConsumedEvent } from '../..';
+import { DendriteEvent, DendriteEventWrapper } from '../../events';
 
 export class RabbitEventBus extends EventBus {
     private connection: amqp.Connection;
@@ -58,16 +58,16 @@ export class RabbitEventBus extends EventBus {
         });
     }
 
-    publishEvent(event: DendriteEventBase): boolean {
-        const publishEvent = new DendriteProducedEvent(event);
-        return this.channel.publish('eventbus', event.name, new Buffer(publishEvent.toString()));
+    publishEvent(event: DendriteEvent): boolean {
+        const wrappedEvent = new DendriteEventWrapper(event);
+        return this.channel.publish('eventbus', event.metadata.name, new Buffer(wrappedEvent.toString()));
     }
-    consumeEvents(): Observable<DendriteConsumedEvent<any>> {
-        return Observable.create((observer: Observer<DendriteConsumedEvent<any>>) => {
+    consumeEvents(): Observable<DendriteEvent> {
+        return Observable.create((observer: Observer<DendriteEvent>) => {
             this.channel.consume(this.queueName, (msg: amqp.Message | null) => {
                 if (msg) {
-                    const rawEvent = new DendriteConsumedEvent(msg.content.toString());
-                    observer.next(rawEvent);
+                    const rawEvent = new DendriteEventWrapper(msg.content.toString());
+                    observer.next(rawEvent.event);
                 }
             });
         });

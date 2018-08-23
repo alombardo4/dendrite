@@ -1,14 +1,12 @@
-import { DendriteEventBase } from '.';
+import { DendriteEventMetadata } from './dendrite-event-metadata.class';
 
-export abstract class DendriteEvent<T extends DendriteEventBase> {
-    protected _name: string;
+export abstract class DendriteEvent {
+  readonly metadata: DendriteEventMetadata;
 
-    protected constructor(name: string) {
-        this._name = name;
+  constructor(name: string) {
+    if (!name) {
+      throw new Error('Metadata is undefined!');
     }
-
-    get name(): string {
-        return this._name;
-    }
-
+    this.metadata = new DendriteEventMetadata(name);
+  }
 }

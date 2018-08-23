@@ -1,7 +1,7 @@
 import * as Bluebird from 'bluebird';
 import { Observable } from 'rxjs';
 import { QueueConfig } from '..';
-import { DendriteEventBase, DendriteConsumedEvent } from '../..';
+import { DendriteEvent } from '../../events';
 
 export abstract class EventBus {
     constructor(protected connectionString: string, protected queueConfig?: QueueConfig,  protected queueName?: string) {
@@ -9,7 +9,7 @@ export abstract class EventBus {
 
     abstract connect(bindings?: string[]): Observable<void>;
 
-    abstract publishEvent(event: DendriteEventBase): boolean;
+    abstract publishEvent(event: DendriteEvent): boolean;
 
-    abstract consumeEvents(): Observable<DendriteConsumedEvent<any>>;
+    abstract consumeEvents(): Observable<DendriteEvent>;
 }
