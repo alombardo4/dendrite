@@ -8,7 +8,7 @@ describe('aggregate loader', () => {
   const connectionString = 'amqp://localhost:5672';
 
   beforeEach((done) => {
-    eventBus = new RabbitEventBus(connectionString, { isProducer: true, isConsumer: true, queueName: uuid.v4() });
+    eventBus = new RabbitEventBus(connectionString, { isProducer: true, isConsumer: true }, uuid.v4());
     eventBus.connect([NAME]).subscribe(() => done());
   });
 
@@ -40,5 +40,5 @@ describe('aggregate loader', () => {
       expect(counter).toEqual(1);
       done();
     }, 20);
-  };
+  });
 });
