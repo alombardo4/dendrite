@@ -1,5 +1,5 @@
 import * as amqp  from 'amqplib';
-import { RabbitEventBus, DendriteEvent, DendriteEventMetadata } from '../../src';
+import { RabbitEventBus, DendriteEvent } from '../../src';
 import * as uuid from 'uuid';
 
 describe('Rabbit Event Bus Implementation', () => {

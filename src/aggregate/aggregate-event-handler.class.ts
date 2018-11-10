@@ -1,9 +1,11 @@
-import { EventHandlerMapping } from '..';
 import { AbstractAggregate } from './abstract-aggregate.class';
+import { DendriteEvent } from '../events';
 
 export abstract class AggregateEventHandler<T extends AbstractAggregate> {
 
+  abstract get identifier(): string;
+
   constructor(public aggregateContext: T) {}
 
-  abstract register(): EventHandlerMapping[];
+  abstract handle(event: DendriteEvent): boolean;
 }

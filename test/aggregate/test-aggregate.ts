@@ -1,4 +1,4 @@
-import { AbstractAggregate, EventBus, AggregateEventHandler, EventHandlerMapping, DendriteEvent } from '../../src';
+import { AbstractAggregate, EventBus, AggregateEventHandler, DendriteEvent } from '../../src';
 import { NAME as createdEventName, ItemCreatedEvent } from './events/item-created.event';
 
 export class TestAggregate extends AbstractAggregate {
@@ -17,16 +17,10 @@ export class TestAggregate extends AbstractAggregate {
 }
 
 class EventHandler1 extends AggregateEventHandler<TestAggregate> {
+  identifier = createdEventName;
 
-  register(): EventHandlerMapping[] {
-    return [
-      {
-        eventName: createdEventName,
-        handlerFunction: (event: ItemCreatedEvent) => {
-          this.aggregateContext.eventCount++;
-        }
-      }
-    ];
+  handle(event: DendriteEvent): boolean {
+    this.aggregateContext.eventCount++;
+    return true;
   }
-
 }

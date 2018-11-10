@@ -1,7 +1,8 @@
-import { Channel } from 'amqplib';
-import { EventHandlerMapping } from '.';
+import { DendriteEvent } from '../events';
 
 export abstract class EventHandler {
 
-  abstract register(): EventHandlerMapping[];
+  abstract get identifier(): string;
+
+  abstract handle(event: DendriteEvent): boolean;
 }

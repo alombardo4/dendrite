@@ -1,22 +1,20 @@
-import { EventBus, EventHandlerMapping, DendriteEvent } from '..';
+import { EventBus, DendriteEvent } from '..';
 import { AggregateEventHandler } from './aggregate-event-handler.class';
 import { DendriteEventWrapper } from '../events';
+import { EventHandler } from '../handlers';
 
 
 export abstract class AbstractAggregate {
 
 
-  private eventHandlerMappings: Map<string, EventHandlerMapping>;
+  private eventHandlerMappings: Map<string, EventHandler>;
 
   constructor(protected eventBus: EventBus) {
     this.eventHandlerMappings = new Map();
   }
 
-  registerEventHandler(eventHandler: AggregateEventHandler) {
-    const mappings = eventHandler.register();
-    eventHandler.register().forEach(map => {
-      this.eventHandlerMappings.set(map.eventName, map);
-    });
+  registerEventHandler(eventHandler: AggregateEventHandler<any>): void {
+    this.eventHandlerMappings.set(eventHandler.identifier, eventHandler);
   }
 
   apply(event: DendriteEvent): void {

@@ -1,24 +1,25 @@
-import { EventHandler, EventBus, EventHandlerMapping, DendriteEvent } from '..';
+import { EventHandler, EventBus, DendriteEvent } from '..';
 
 export class EventGateway {
   private eventHandlers: EventHandler[];
 
-  private eventHandlerMappings: Map<string, EventHandlerMapping>;
+  private eventHandlerMappings: Map<string, EventHandler>;
 
   constructor(private eventBus: EventBus, eventHandlers: EventHandler[]) {
     this.eventHandlers = eventHandlers;
     this.eventHandlerMappings = new Map();
     this.eventHandlers.forEach(eh => {
-      const mappingsForHandler = eh.register();
-      mappingsForHandler.forEach(map => {
-        this.eventHandlerMappings.set(map.eventName, map);
-      });
+      if (this.eventHandlerMappings.get(eh.identifier)) {
+        console.error(`An event handle with identifer ${eh.identifier} has already been registered. Aborting!`);
+      } else {
+        this.eventHandlerMappings.set(eh.identifier, eh);
+      }
     });
 
     eventBus.consumeEvents().subscribe((event: DendriteEvent) => {
       const eventName = event.metadata.name;
       try {
-        this.eventHandlerMappings.get(eventName).handlerFunction(event);
+        this.eventHandlerMappings.get(eventName).handle(event);
       } catch (e) {
         console.error('An error occurred in event handling', e);
       }

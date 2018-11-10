@@ -1,5 +1,5 @@
 import * as uuid from 'uuid';
-import { EventHandler, RabbitEventBus, QueueConfig, EventGateway, EventHandlerMapping, DendriteEvent, DendriteEventMetadata } from '../../src';
+import { EventHandler, RabbitEventBus, QueueConfig, EventGateway, DendriteEvent, DendriteEventMetadata } from '../../src';
 
 describe('EventGateway', () => {
 
@@ -27,50 +27,45 @@ describe('EventGateway', () => {
 
   it('should register event handler mappings in constructor', () => {
     // Arrange
-    class TestEventHandler extends EventHandler {
-      register(): EventHandlerMapping[] {
-        return [
-          {
-            eventName: 'test.event.name1',
-            handlerFunction: jest.fn()
-          },
-          {
-            eventName: 'test.event.name2',
-            handlerFunction: jest.fn()
-          }
-        ];
+    class TestEventHandler1 extends EventHandler {
+      handle(event: DendriteEvent): boolean {
+        return true;
       }
+      identifier = 'test.event.name1';
+
     }
 
+    class TestEventHandler2 extends EventHandler {
+      identifier = 'test.event.name2';
+      handle(event: DendriteEvent): boolean {
+        return true;
+      }
+    }
     // Act
-    const eventGateway = new EventGateway(eventBus, [new TestEventHandler()]);
+    const eventGateway = new EventGateway(eventBus, [new TestEventHandler1(), new TestEventHandler2()]);
 
     // Assert
-    expect(eventGateway['eventHandlers'].length).toBe(1);
+    expect(eventGateway['eventHandlers'].length).toBe(2);
     expect(eventGateway['eventHandlerMappings'].size).toBe(2);
   });
 
-  it('should route events to their handler functions with a single handler class', (done) => {
+  it('should route events to their handler functions with handler classes', (done) => {
     // Arrange
     let gotEvent1 = false;
     let gotEvent2 = false;
-    class TestEventHandler extends EventHandler {
-      mappings =  [
-        {
-          eventName: 'test.event.name1',
-          handlerFunction: (event: TestEvent1) => {
-            gotEvent1 = true;
-          }
-        },
-        {
-          eventName: 'test.event.name2',
-          handlerFunction: (event: TestEvent2) => {
-            gotEvent2 = true;
-          }
-        }
-      ];
-      register(): EventHandlerMapping[] {
-        return this.mappings;
+    class TestEventHandler1 extends EventHandler {
+      identifier = 'test.event.name1';
+      handle(event: TestEvent1): boolean {
+        gotEvent1 = true;
+        return true;
+      }
+    }
+
+    class TestEventHandler2 extends EventHandler {
+      identifier = 'test.event.name2';
+      handle(event: TestEvent2): boolean {
+        gotEvent2 = true;
+        return true;
       }
     }
 
@@ -86,9 +81,8 @@ describe('EventGateway', () => {
       }
     }
 
-    const eventHandler = new TestEventHandler();
     // Act
-    const eventGateway = new EventGateway(eventBus, [eventHandler]);
+    const eventGateway = new EventGateway(eventBus, [new TestEventHandler1(), new TestEventHandler2()]);
     setTimeout(() => {
       eventBus.publishEvent(new TestEvent2());
     }, 10);
@@ -96,68 +90,6 @@ describe('EventGateway', () => {
     // Assert
     setTimeout(() => {
       expect(gotEvent1).toBeFalsy();
-      expect(gotEvent2).toBeTruthy();
-      done();
-    }, 20);
-  });
-
-  it('should route events to their handler functions with a multiple handler classes', (done) => {
-    // Arrange
-    let gotEvent1 = false;
-    let gotEvent2 = false;
-    class TestEventHandler1 extends EventHandler {
-      mappings =  [
-        {
-          eventName: 'test.event.name1',
-          handlerFunction: (event: TestEvent1) => {
-            gotEvent1 = true;
-          }
-        }
-      ];
-      register(): EventHandlerMapping[] {
-        return this.mappings;
-      }
-    }
-
-    class TestEventHandler2 extends EventHandler {
-      mappings =  [
-        {
-          eventName: 'test.event.name2',
-          handlerFunction: (event: TestEvent2) => {
-            gotEvent2 = true;
-          }
-        }
-      ];
-      register(): EventHandlerMapping[] {
-        return this.mappings;
-      }
-    }
-
-    class TestEvent1 extends DendriteEvent {
-      constructor() {
-        super('test.event.name1');
-      }
-    }
-
-    class TestEvent2 extends DendriteEvent {
-      constructor() {
-        super('test.event.name2');
-      }
-    }
-
-    const eventHandler1 = new TestEventHandler1();
-    const eventHandler2 = new TestEventHandler2();
-
-    // Act
-    const eventGateway = new EventGateway(eventBus, [eventHandler1, eventHandler2]);
-    setTimeout(() => {
-      eventBus.publishEvent(new TestEvent1());
-      eventBus.publishEvent(new TestEvent2());
-    }, 10);
-
-    // Assert
-    setTimeout(() => {
-      expect(gotEvent1).toBeTruthy();
       expect(gotEvent2).toBeTruthy();
       done();
     }, 20);
