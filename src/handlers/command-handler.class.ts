@@ -1,8 +1,9 @@
 import { BaseCommand } from '../commands/base-command.class';
+import { CommandExecutionContext } from '../commands/command-execution-context.class';
 
-export abstract class CommandHandler {
+export abstract class CommandHandler<T extends BaseCommand> {
 
-  abstract identifier(): string;
+  abstract get identifier(): string;
 
-  abstract handle(command: BaseCommand): boolean;
+  abstract handle(commandExecutionContext: CommandExecutionContext<T>): boolean;
 }

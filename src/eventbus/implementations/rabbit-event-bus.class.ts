@@ -62,6 +62,7 @@ export class RabbitEventBus extends EventBus {
         const wrappedEvent = new DendriteEventWrapper(event);
         return this.channel.publish('eventbus', event.metadata.name, new Buffer(wrappedEvent.toString()));
     }
+
     consumeEvents(): Observable<DendriteEvent> {
         return Observable.create((observer: Observer<DendriteEvent>) => {
             this.channel.consume(this.queueName, (msg: amqp.Message | null) => {

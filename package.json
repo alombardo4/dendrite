@@ -53,6 +53,9 @@
     "testMatch": [
       "<rootDir>/test/**/*.spec.(ts|js)"
     ],
-    "reporters": ["default", "jest-junit"]
+    "reporters": [
+      "default",
+      "jest-junit"
+    ]
   }
 }

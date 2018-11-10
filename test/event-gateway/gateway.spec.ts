@@ -45,7 +45,6 @@ describe('EventGateway', () => {
     const eventGateway = new EventGateway(eventBus, [new TestEventHandler1(), new TestEventHandler2()]);
 
     // Assert
-    expect(eventGateway['eventHandlers'].length).toBe(2);
     expect(eventGateway['eventHandlerMappings'].size).toBe(2);
   });
 
