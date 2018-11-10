@@ -1,4 +1,4 @@
-import { DendriteEvent } from '../events';
+import { DendriteEvent } from '../';
 
 export abstract class EventHandler {
 

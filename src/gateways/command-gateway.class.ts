@@ -1,6 +1,4 @@
-import { CommandHandler } from '../handlers/command-handler.class';
-import { BaseCommand } from '../commands/base-command.class';
-import { CommandExecutionContext } from '../commands/command-execution-context.class';
+import { CommandHandler, BaseCommand, CommandExecutionContext } from '../';
 
 export class CommandGateway {
 

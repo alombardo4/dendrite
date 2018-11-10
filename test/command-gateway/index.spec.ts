@@ -1,7 +1,4 @@
-import { CommandHandler } from '../../src/handlers/command-handler.class';
-import { BaseCommand } from '../../src/commands/base-command.class';
-import { CommandGateway } from '../../src';
-import { CommandExecutionContext } from '../../src/commands/command-execution-context.class';
+import { CommandHandler, BaseCommand, CommandExecutionContext, CommandGateway } from '../../src';
 
 describe('Command Gatway', () => {
 

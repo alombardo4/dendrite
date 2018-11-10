@@ -1,8 +1,4 @@
-import { EventBus, DendriteEvent } from '..';
-import { AggregateEventHandler } from './aggregate-event-handler.class';
-import { DendriteEventWrapper } from '../events';
-import { EventHandler } from '../handlers';
-
+import { EventBus, DendriteEvent, AggregateEventHandler, DendriteEventWrapper, EventHandler } from '..';
 
 export abstract class AbstractAggregate {
 

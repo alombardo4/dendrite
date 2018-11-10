@@ -1,4 +1,4 @@
-import { DendriteEventMetadata } from './dendrite-event-metadata.class';
+import { DendriteEventMetadata } from '../';
 
 export abstract class DendriteEvent {
   readonly metadata: DendriteEventMetadata;

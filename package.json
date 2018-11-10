@@ -27,19 +27,19 @@
   "homepage": "https://github.com/alombardo4/dendrite#readme",
   "devDependencies": {
     "@types/amqplib": "^0.5.7",
-    "@types/bluebird": "^3.5.20",
     "@types/jest": "^22.2.3",
+    "@types/mongodb": "^3.1.14",
     "@types/uuid": "^3.4.3",
     "jest": "^22.4.3",
     "jest-junit": "^5.1.0",
     "tslint": "^5.10.0",
-    "typescript": "^2.8.3",
-    "uuid": "^3.3.2"
+    "typescript": "^2.8.3"
   },
   "dependencies": {
     "amqplib": "^0.5.2",
-    "bluebird": "^3.5.1",
-    "rxjs": "^6.2.0"
+    "mongodb": "^3.1.9",
+    "rxjs": "^6.2.0",
+    "uuid": "^3.3.2"
   },
   "jest": {
     "moduleFileExtensions": [

@@ -1,5 +1,5 @@
 import * as uuid from 'uuid';
-import { EventHandler, RabbitEventBus, QueueConfig, EventGateway, DendriteEvent, DendriteEventMetadata } from '../../src';
+import { EventHandler, RabbitEventBus, QueueConfig, EventGateway, DendriteEvent } from '../../src';
 
 describe('EventGateway', () => {
 

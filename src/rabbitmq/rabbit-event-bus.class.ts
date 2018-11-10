@@ -1,7 +1,6 @@
 import * as amqp  from 'amqplib';
 import { Observable, Observer } from 'rxjs';
-import { EventBus } from '..';
-import { DendriteEvent, DendriteEventWrapper } from '../../events';
+import { EventBus, DendriteEvent, DendriteEventWrapper } from '../';
 
 export class RabbitEventBus extends EventBus {
     private connection: amqp.Connection;

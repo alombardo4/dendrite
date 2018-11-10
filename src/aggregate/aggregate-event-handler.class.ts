@@ -1,5 +1,4 @@
-import { AbstractAggregate } from './abstract-aggregate.class';
-import { DendriteEvent } from '../events';
+import { AbstractAggregate, DendriteEvent } from '../';
 
 export abstract class AggregateEventHandler<T extends AbstractAggregate> {
 

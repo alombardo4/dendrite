@@ -1,3 +1,2 @@
-export * from './models/event-bus.class';
-export * from './models/queue-config.class';
-export * from './implementations/rabbit-event-bus.class';
+export * from './event-bus.class';
+export * from './queue-config.class';

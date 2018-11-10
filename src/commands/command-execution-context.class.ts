@@ -1,4 +1,4 @@
-import { BaseCommand } from './base-command.class';
+import { BaseCommand } from '../';
 import uuid = require('uuid');
 
 export class CommandExecutionContext<T extends BaseCommand> {

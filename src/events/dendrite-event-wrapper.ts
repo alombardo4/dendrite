@@ -1,4 +1,4 @@
-import { DendriteEvent } from '.';
+import { DendriteEvent } from '../';
 
 export class DendriteEventWrapper<T extends DendriteEvent> {
   private _event: T;
