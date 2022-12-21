@@ -1,5 +1,5 @@
-import { DendriteEvent } from '../event/dendrite-event'
-import { JSONSerde } from './json-serde'
+import { DendriteEvent } from '../event/dendrite-event';
+import { JSONSerde } from './json-serde';
 
 describe(JSONSerde.name, () => {
   class MockEvent extends DendriteEvent {
@@ -9,7 +9,7 @@ describe(JSONSerde.name, () => {
       public time: Date,
       public bool: boolean
     ) {
-      super(id)
+      super(id);
     }
   }
 
@@ -20,14 +20,14 @@ describe(JSONSerde.name, () => {
         'name',
         new Date(2022, 1, 2, 3, 4, 5, 6),
         false
-      )
+      );
       const result = new JSONSerde().deserialize(
         `{"aggregateId":"1","name":"name","time":"${mockObj.time.toISOString()}","bool":false}`,
         MockEvent.prototype
-      )
-      expect(result).toEqual(mockObj)
-    })
-  })
+      );
+      expect(result).toEqual(mockObj);
+    });
+  });
 
   describe('serialize', () => {
     it('should produce a JSON string', () => {
@@ -36,11 +36,11 @@ describe(JSONSerde.name, () => {
         'name',
         new Date(2022, 1, 2, 3, 4, 5, 6),
         false
-      )
-      const result = new JSONSerde().serialize(mockObj)
+      );
+      const result = new JSONSerde().serialize(mockObj);
       expect(result).toEqual(
         `{"aggregateId":"1","name":"name","time":"${mockObj.time.toISOString()}","bool":false}`
-      )
-    })
-  })
-})
+      );
+    });
+  });
+});
