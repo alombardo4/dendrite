@@ -2,12 +2,13 @@
   "name": "dendrite",
   "version": "1.0.0",
   "description": "An event-sourcing library for NodeJS",
-  "main": "index.js",
+  "main": "dist/index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "tsc": "tsc",
+    "build": "npm run tsc",
+    "tsc": "tsc --declaration",
     "tsc:w": "tsc -w",
     "test": "jest",
     "test:w": "jest --watch",
@@ -51,7 +52,7 @@
     ],
     "preset": "ts-jest",
     "testMatch": [
-      "<rootDir>/**/*.spec.(ts|js)"
+      "<rootDir>/src/**/*.spec.(ts|js)"
     ],
     "reporters": [
       "default",
