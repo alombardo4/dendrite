@@ -1,3 +1,3 @@
 export abstract class DendriteEvent {
-  constructor(public readonly aggregateId: string) {}
+    constructor(public readonly aggregateId: string) {}
 }
