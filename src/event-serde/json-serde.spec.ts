@@ -22,7 +22,7 @@ describe(JSONSerde.name, () => {
         false
       );
       const result = new JSONSerde().deserialize(
-        '{"aggregateId":"1","name":"name","time":"2022-02-02T08:04:05.006Z","bool":false}',
+        `{"aggregateId":"1","name":"name","time":"${mockObj.time.toISOString()}","bool":false}`,
         MockEvent.prototype
       );
       expect(result).toEqual(mockObj);
@@ -39,7 +39,7 @@ describe(JSONSerde.name, () => {
       );
       const result = new JSONSerde().serialize(mockObj);
       expect(result).toEqual(
-        '{"aggregateId":"1","name":"name","time":"2022-02-02T08:04:05.006Z","bool":false}'
+        `{"aggregateId":"1","name":"name","time":"${mockObj.time.toISOString()}","bool":false}`
       );
     });
   });
