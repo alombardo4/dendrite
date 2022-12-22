@@ -1,5 +1,4 @@
-import { DendriteAggregate } from '../aggregate';
-import { DendriteEvent } from '../event/dendrite-event';
+import { DendriteAggregate, DendriteEvent } from '../types';
 import { EventSerde } from './event-serde';
 
 const isoDateRegex = new RegExp(

@@ -1,4 +1,4 @@
-import { DendriteEvent } from '../event/dendrite-event';
+import { DendriteEvent } from '../types';
 import { JSONSerde } from './json-serde';
 
 describe(JSONSerde.name, () => {

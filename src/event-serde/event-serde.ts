@@ -1,5 +1,5 @@
-import { DendriteAggregate } from '../aggregate';
-import { DendriteEvent } from '../event/dendrite-event';
+import { DendriteEvent } from '../types';
+import { DendriteAggregate } from '../types/aggregate';
 
 export abstract class EventSerde {
     abstract serialize<A extends DendriteAggregate, T extends DendriteEvent<A>>(
