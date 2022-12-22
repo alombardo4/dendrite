@@ -2,7 +2,7 @@ import { DendriteEvent } from '../event/dendrite-event';
 import { JSONSerde } from './json-serde';
 
 describe(JSONSerde.name, () => {
-    class MockEvent extends DendriteEvent {
+    class MockEvent extends DendriteEvent<any> {
         constructor(
             id: string,
             public name: string,

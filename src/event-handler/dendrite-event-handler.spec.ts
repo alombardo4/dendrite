@@ -2,7 +2,7 @@ import { DendriteEvent } from '../event/dendrite-event';
 import { DendriteEventHandler } from './dendrite-event-handler';
 
 describe(DendriteEventHandler.name, () => {
-    class MockEvent extends DendriteEvent {
+    class MockEvent extends DendriteEvent<any> {
         constructor(id: string, public increment: number) {
             super(id);
         }

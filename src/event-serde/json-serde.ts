@@ -1,3 +1,4 @@
+import { DendriteAggregate } from '../aggregate';
 import { DendriteEvent } from '../event/dendrite-event';
 import { EventSerde } from './event-serde';
 
@@ -21,10 +22,15 @@ export class JSONSerde extends EventSerde {
         return value;
     }
 
-    serialize<T extends DendriteEvent>(obj: T): string {
+    serialize<A extends DendriteAggregate, T extends DendriteEvent<A>>(
+        obj: T
+    ): string {
         return JSON.stringify(obj, JSONSerde.customSerializer);
     }
-    deserialize<T extends DendriteEvent>(raw: string, constructor: T): T {
+    deserialize<A extends DendriteAggregate, T extends DendriteEvent<A>>(
+        raw: string,
+        constructor: T
+    ): T {
         const rawObj = JSON.parse(raw, JSONSerde.customParser);
         return Object.assign(constructor, rawObj);
     }
